@@ -41,9 +41,9 @@ DEALLOCATE db_cursor
 
 -- Create Credential for Azure Blob container (SAS Token)
 
-CREATE CREDENTIAL [https://mssqldmsmigrationdemo.blob.core.windows.net/sqlbackup]
+CREATE CREDENTIAL [https://[StorageAccName].blob.core.windows.net/sqlbackup]
 WITH IDENTITY = 'SHARED ACCESS SIGNATURE',
-SECRET = 'sp=racwdli&st=2026-03-14T06:10:02Z&se=2026-03-28T14:25:02Z&spr=https&sv=2024-11-04&sr=c&sig=nCxOnT2XBh1Hca75loz5T%2BnGCwiWJNaPVrwRoKXBxxo%3D';
+SECRET = '*******';
 
 
 -- One time Full backup for all DBs except System DBs
@@ -64,7 +64,7 @@ BEGIN
 
 SET @SQL =
 'BACKUP DATABASE ['+@DBName+']
-TO URL = ''https://mssqldmsmigrationdemo.blob.core.windows.net/sqlbackup/'+@DBName+'/'+@DBName+'_FULL.bak''
+TO URL = ''https://[StorageAccName].blob.core.windows.net/sqlbackup/'+@DBName+'/'+@DBName+'_FULL.bak''
 WITH INIT'
 
 PRINT @SQL
@@ -100,7 +100,7 @@ BEGIN
 
 SET @SQL =
 'BACKUP LOG ['+@DBName+']
-TO URL = ''https://mssqldmsmigrationdemo.blob.core.windows.net/sqlbackup/'+@DBName+'/'+@DBName+'_LOG_'+@TimeStamp+'.trn''
+TO URL = ''https://[StorageAccName].blob.core.windows.net/sqlbackup/'+@DBName+'/'+@DBName+'_LOG_'+@TimeStamp+'.trn''
 WITH INIT'
 
 EXEC(@SQL)
